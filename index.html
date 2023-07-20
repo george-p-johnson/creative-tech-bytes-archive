@@ -4,57 +4,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple 1 Column Website</title>
+  <title>GPJ Creative Archive</title>
   <style>
-        .flex-container {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        justify-content: center;
-        align-items: stretch;
-        align-content: normal;
-        }
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
 
-        .flex-items {
-            justify-content: center;
-        }
+.flex-items:nth-child(1) {
+  display: block;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  align-self: auto;
+  order: 0;
+}
 
-        .flex-items:nth-child(1) {
-        display: flex;
-        flex-grow: 0;
-        flex-shrink: 1;
-        flex-basis: auto;
-        align-self: auto;
-        order: 0;
-        }
+.flex-items:nth-child(2) {
+  display: block;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  align-self: auto;
+  order: 0;
+}
 
-        .flex-items:nth-child(2) {
-        display: flex;
-        flex-grow: 0;
-        flex-shrink: 1;
-        flex-basis: auto;
-        align-self: auto;
-        order: 0;
-        }
+.flex-items:nth-child(3) {
+  display: block;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  align-self: auto;
+  order: 0;
+}
 
-        .flex-items:nth-child(3) {
-        display: block;
-        flex-grow: 0;
-        flex-shrink: 1;
-        flex-basis: auto;
-        align-self: auto;
-        order: 0;
-        }
+
   </style>
 </head>
 <body>
-  <div class="flex-container">
+  <!-- <div class="flex-container">
     <div class="flex-items">
         <img src="/img/gpj-logo-tech-byte-email.png" alt="Hero Image">
     </div>
     <div class="flex-items">   
-        <a href="/14.0.html"> <h2>14.0</h2></a>
+        <div class="flex-items"><a href="/14.0.html"> <h2>14.0</h2></a></div>
+        <div class="flex-items"><a href="/14.0.html"> <h2>14.0</h2></a></div>
     </div>
- </div>
+    <div class="flex-items">   
+      <a href="/14.0.html"> <h2>22.0</h2></a>
+    </div>
+ </div> -->
+ <div class="flex-container">
+  <div class="flex-items"><img src="/img/gpj-logo-tech-byte-email.png" alt="Hero Image"></div>
+  <div class="flex-items"><a href="/14.0.html"> <h2>14.0</h2></a></div>
+  <div class="flex-items"><a href="/22.0.html"> <h2>22.0</h2></a></div>
+</div>
 </body>
 </html>

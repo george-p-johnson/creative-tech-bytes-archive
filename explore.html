@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Articles • Creative Tech Bytes</title>
+  <meta name="robots" content="index,follow">
+  <meta name="description" content="Search and filter all links from Creative Tech Bytes editions.">
+  <link rel="icon" href="img/gpj-logo-tech-byte-email.png">
+  <style>
+    :root {
+      --bg: #000;
+      --card: #f3f3f3;
+      --text: #111;
+      --accent: #68f5b2;
+      --chip: #e9e9e9;
+    }
+    body { background: var(--bg); margin: 0; }
+    .logo-container { text-align:center; margin: 24px 0 8px; }
+    .logo-container img { max-width: 280px; height:auto; }
+    .title-container { color: var(--accent); text-align:center; font-family: "Poppins", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Liberation Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji; }
+    .controls { max-width: 1100px; margin: 10px auto 0; padding: 0 12px; display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:center; }
+    .search { flex:1 1 360px; max-width: 600px; }
+    .search input { width:100%; padding:12px 14px; border-radius:10px; border:1px solid #ccc; font-size:16px; }
+    .selects { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+    select { padding:10px; border-radius:10px; border:1px solid #ccc; font-size:14px; }
+    .chips { max-width: 1100px; margin: 4px auto 8px; padding: 0 12px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+    .chip { background: var(--chip); border-radius: 999px; padding: 6px 10px; font-size: 13px; cursor: pointer; user-select: none; }
+    .chip.active { background: var(--accent); }
+    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; padding: 12px; max-width: 1400px; margin: 8px auto 40px; }
+    .card { background: var(--card); border: 1px solid #ddd; border-radius: 10px; overflow: hidden; display:flex; flex-direction:column; font-family: "Poppins", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Liberation Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji; }
+    .thumb { width:100%; aspect-ratio: 16/9; object-fit: cover; background:#ddd; }
+    .card-body { padding: 12px; display:flex; flex-direction:column; gap:8px; }
+    .title { font-size: 16px; font-weight: 600; color: var(--text); margin:0; }
+    .title a { color: inherit; text-decoration: none; }
+    .meta { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .badge { background:#fff; border:1px solid #ccc; border-radius: 999px; padding: 4px 8px; font-size: 12px; }
+    .desc { color:#333; font-size: 13px; line-height: 1.35; margin: 0; }
+    .empty { color:#bbb; text-align:center; padding: 30px 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+  </style>
+</head>
+<body>
+  <div class="logo-container"><img src="img/gpj-logo-tech-byte-email.png" alt="Logo"></div>
+  <div class="title-container"><h1>Explore Articles</h1></div>
+
+  <div class="controls">
+    <div class="search">
+      <input id="q" type="search" placeholder="Search titles and tags…" aria-label="Search">
+    </div>
+    <div class="selects">
+      <select id="edition" aria-label="Edition">
+        <option value="">All editions</option>
+      </select>
+    </div>
+  </div>
+  <div class="chips" id="chips"></div>
+
+  <div id="grid" class="grid" aria-live="polite"></div>
+  <div id="empty" class="empty" style="display:none;">No results. Try changing filters.</div>
+
+  <script>
+    const state = {
+      items: [], // {title,url,edition,tag,img}
+      filter: { q: '', edition: '', tags: new Set() },
+      tags: new Set(),
+      editions: [],
+    };
+
+    async function loadManifest() {
+      const res = await fetch('manifest.json');
+      if (!res.ok) throw new Error('Failed to fetch manifest');
+      return res.json(); // [{num,file}]
+    }
+
+    async function loadEdition(file, num) {
+      const res = await fetch(file);
+      if (!res.ok) throw new Error('Failed to fetch ' + file);
+      const html = await res.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const items = extractArticles(doc, num);
+      return items;
+    }
+
+    function extractArticles(doc, editionNum) {
+      const out = [];
+      let lastTag = null;
+      let lastImg = null;
+      const h2s = Array.from(doc.querySelectorAll('h2'));
+      for (const h2 of h2s) {
+        // Track a tag header like "#Space"
+        const txt = h2.textContent?.trim() || '';
+        if (/#[A-Za-z0-9_\-]+/.test(txt)) {
+          lastTag = txt.replace(/\s+/g, ' ').trim();
+        }
+        // Track preceding image for this section: look backwards for the nearest <img>
+        let img = null;
+        // Scan previous siblings and their imgs up to some distance
+        let p = h2;
+        for (let i = 0; i < 12 && p; i++) {
+          p = p.previousElementSibling || p.parentElement;
+          if (!p) break;
+          const candidate = p.querySelector ? p.querySelector('img') : null;
+          if (candidate) { img = candidate.getAttribute('src'); break; }
+        }
+        if (img) lastImg = img;
+
+        const a = h2.querySelector('a[href^="http"]');
+        if (!a) continue;
+        const title = (a.textContent || '').trim();
+        const url = a.getAttribute('href');
+        if (!title || !url) continue;
+
+        out.push({
+          title,
+          url,
+          edition: String(editionNum),
+          tag: lastTag || '',
+          img: lastImg || '',
+        });
+      }
+      return out;
+    }
+
+    function renderFilters() {
+      // Editions
+      const edSel = document.getElementById('edition');
+      edSel.innerHTML = '<option value="">All editions</option>' + state.editions.map(e => `<option value="${e}">${e}.0</option>`).join('');
+      edSel.value = state.filter.edition;
+
+      // Chips
+      const chips = document.getElementById('chips');
+      const tags = Array.from(state.tags).sort((a,b)=>a.localeCompare(b));
+      chips.innerHTML = tags.map(t => `<span class="chip ${state.filter.tags.has(t) ? 'active' : ''}" data-tag="${t}">${t}</span>`).join('');
+      chips.querySelectorAll('.chip').forEach(el => {
+        el.addEventListener('click', () => {
+          const t = el.dataset.tag;
+          if (state.filter.tags.has(t)) state.filter.tags.delete(t); else state.filter.tags.add(t);
+          el.classList.toggle('active');
+          renderGrid();
+        });
+      });
+    }
+
+    function sanitizeUrl(u) {
+      if (!u) return '';
+      try {
+        // Pull the last http(s):// occurrence if concatenated
+        const matches = u.match(/https?:\/\/[^\s"']+/g);
+        if (matches && matches.length) u = matches[matches.length - 1];
+        u = u.replace('https//', 'https://').replace('http//', 'http://');
+        if (u.startsWith('//')) u = 'https:' + u;
+        if (u.startsWith('www.')) u = 'https://' + u;
+        // Drop likely logos/svgs
+        if (/\.svg(\?|$)/i.test(u)) return '';
+        if (!/^https?:\/\//i.test(u)) return '';
+        return u;
+      } catch { return ''; }
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById('grid');
+      const empty = document.getElementById('empty');
+      const q = state.filter.q.toLowerCase();
+      const tagFilter = state.filter.tags;
+      const ed = state.filter.edition;
+
+      const items = state.items.filter(it => {
+        if (ed && it.edition !== ed) return false;
+        if (tagFilter.size > 0) {
+          if (!it.tag || !Array.from(tagFilter).some(t => it.tag.includes(t))) return false;
+        }
+        if (q) {
+          const hay = `${it.title} ${it.tag} ${it.edition} ${it.description || ''}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      grid.innerHTML = items.map(it => {
+        const imgUrl = sanitizeUrl(it.img || it.image || '');
+        return `
+        <div class="card">
+          ${imgUrl ? `<img class="thumb" src="${imgUrl}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null; this.outerHTML='<div class=\"thumb\"></div>'">` : `<div class="thumb"></div>`}
+          <div class="card-body">
+            <h3 class="title"><a href="${it.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(it.title)}</a></h3>
+            <div class="meta">
+              <span class="badge">Edition ${it.edition}.0</span>
+              ${it.tag ? `<span class="badge">${escapeHtml(it.tag)}</span>` : ''}
+            </div>
+            ${it.description ? `<p class="desc">${escapeHtml(it.description)}</p>` : ''}
+          </div>
+        </div>
+      `}).join('');
+
+      empty.style.display = items.length ? 'none' : 'block';
+    }
+
+    function escapeHtml(s){
+      return s.replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    }
+
+    async function init() {
+      try {
+        // Prefer prebuilt JSON database if present
+        let usedPrebuilt = false;
+        try {
+          const ar = await fetch('articles.json');
+          if (ar.ok) {
+            const items = await ar.json();
+            state.items = items.map(x => ({
+              title: x.title,
+              url: x.url,
+              edition: String(x.edition),
+              tag: x.tag || '',
+              img: x.image || '',
+              description: x.description || ''
+            }));
+            for (const it of state.items) if (it.tag) state.tags.add(it.tag);
+            state.editions = [...new Set(state.items.map(x => x.edition))].sort((a,b)=>Number(b)-Number(a));
+            usedPrebuilt = true;
+          }
+        } catch {}
+
+        if (!usedPrebuilt) {
+          const manifest = await loadManifest();
+          state.editions = manifest.map(m => m.num);
+          renderFilters();
+          const batches = manifest.map(m => loadEdition(m.file, m.num));
+          const results = await Promise.allSettled(batches);
+          for (const r of results) {
+            if (r.status === 'fulfilled') {
+              for (const item of r.value) {
+                state.items.push(item);
+                if (item.tag) state.tags.add(item.tag);
+              }
+            } else {
+              console.warn('Failed to load edition:', r.reason);
+            }
+          }
+        }
+        renderFilters();
+        renderGrid();
+      } catch (err) {
+        console.error(err);
+        document.getElementById('empty').textContent = 'Failed to load data.';
+        document.getElementById('empty').style.display = 'block';
+      }
+    }
+
+    // Wire controls
+    document.getElementById('q').addEventListener('input', (e) => {
+      state.filter.q = e.target.value || '';
+      renderGrid();
+    });
+    document.getElementById('edition').addEventListener('change', (e) => {
+      state.filter.edition = e.target.value || '';
+      renderGrid();
+    });
+
+    init();
+  </script>
+</body>
+</html>

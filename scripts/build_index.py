@@ -11,6 +11,8 @@ from __future__ import annotations
 
 import os
 import re
+import json
+from html import unescape
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -107,6 +109,10 @@ def build_index(cards_html: str) -> str:
   <div class=\"logo-container\"><img src=\"img/gpj-logo-tech-byte-email.png\" alt=\"Logo\"></div>
   <div class=\"title-container\"><h1>Creative Tech Bytes Archive</h1></div>
 
+  <div style=\"text-align:center;margin-bottom:20px;\">
+    <a href=\"explore.html\" style=\"display:inline-block;background:#68f5b2;color:black;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:600;\">Explore All Articles</a>
+  </div>
+
   <div class=\"grid-container\">
     {cards_html}
   </div>
@@ -121,8 +127,136 @@ def main() -> None:
     html = build_index(cards)
     (ROOT / "index.html").write_text(html, encoding="utf-8")
     print(f"Generated index.html with {len(editions)} editions.")
+    # Also write a manifest the explore UI can use
+    manifest = [
+        {"num": num, "file": name}
+        for num, name in editions
+    ]
+    (ROOT / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    print("Wrote manifest.json")
+    # Build a consolidated articles database
+    db = []
+    for num, name in editions:
+        try:
+            html_text = (ROOT / name).read_text(encoding="utf-8", errors="ignore")
+        except Exception as e:
+            print(f"Warning: failed reading {name}: {e}")
+            continue
+        articles = extract_articles_from_html(html_text, edition=num)
+        db.extend(articles)
+    (ROOT / "articles.json").write_text(json.dumps(db, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"Wrote articles.json with {len(db)} articles")
+
+
+# --------------------------
+# Article extraction helpers
+# --------------------------
+
+H2_LINK_RE = re.compile(r"<h2\b[^>]*>.*?<a[^>]*href=\"(http[^\"]+)\"[^>]*>(.*?)</a>.*?</h2>", re.IGNORECASE | re.DOTALL)
+IMG_RE = re.compile(r"<img[^>]+src=\"(http[^\"]+)\"", re.IGNORECASE)
+P_RE = re.compile(r"<p\b[^>]*>(.*?)</p>", re.IGNORECASE | re.DOTALL)
+H2_RE = re.compile(r"<h2\b[^>]*>(.*?)</h2>", re.IGNORECASE | re.DOTALL)
+
+
+def _strip_tags(s: str) -> str:
+    # naive strip of tags and entities
+    s = re.sub(r"<[^>]+>", " ", s)
+    s = unescape(s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+
+def _find_last_tag_before(html: str, pos: int) -> str:
+    window_start = max(0, pos - 8000)
+    window = html[window_start:pos]
+    tags = list(H2_RE.finditer(window))
+    for m in reversed(tags):
+        text = _strip_tags(m.group(1))
+        # Find a hashtag token
+        mo = re.search(r"(#[A-Za-z0-9_\-]+)", text)
+        if mo:
+            return mo.group(1)
+    return ""
+
+
+def _find_last_image_before(html: str, pos: int) -> str:
+    window_start = max(0, pos - 8000)
+    window = html[window_start:pos]
+    imgs = IMG_RE.findall(window)
+    return imgs[-1] if imgs else ""
+
+
+def _find_first_paragraph_after(html: str, pos: int) -> str:
+    window_end = min(len(html), pos + 12000)
+    window = html[pos:window_end]
+    for m in P_RE.finditer(window):
+        text = _strip_tags(m.group(1))
+        if len(text) >= 30:  # skip short/empty p's
+            return text
+    return ""
+
+
+def extract_articles_from_html(html: str, edition: int) -> list[dict]:
+    out: list[dict] = []
+    for m in H2_LINK_RE.finditer(html):
+        url = m.group(1).strip()
+        title_html = m.group(2)
+        title = _strip_tags(title_html)
+        if not title or not url:
+            continue
+        start, end = m.span()
+        tag = _find_last_tag_before(html, start)
+        image = _sanitize_image_url(_find_last_image_before(html, start))
+        url = _sanitize_link_url(url)
+        desc = _find_first_paragraph_after(html, end)
+        out.append({
+            "edition": edition,
+            "title": title,
+            "url": url,
+            "image": image,
+            "description": desc,
+            "tag": tag,
+        })
+    return out
+
+
+_HTTP_RE = re.compile(r"https?://[^\s\"']+", re.IGNORECASE)
+
+
+def _sanitize_image_url(u: str) -> str:
+    if not u:
+        return ""
+    # pick the last full http(s) occurrence if concatenated
+    matches = _HTTP_RE.findall(u)
+    if matches:
+        u = matches[-1]
+    u = u.replace("https//", "https://").replace("http//", "http://")
+    if u.startswith("//"):
+        u = "https:" + u
+    if u.startswith("www."):
+        u = "https://" + u
+    if not u.lower().startswith(("http://", "https://")):
+        return ""
+    if u.lower().endswith(".svg") or ".svg?" in u.lower():
+        return ""
+    return u
+
+
+def _sanitize_link_url(u: str) -> str:
+    if not u:
+        return ""
+    matches = _HTTP_RE.findall(u)
+    if matches:
+        u = matches[0]
+    u = u.replace("https//", "https://").replace("http//", "http://")
+    if u.startswith("//"):
+        u = "https:" + u
+    if u.startswith("www."):
+        u = "https://" + u
+    if not u.lower().startswith(("http://", "https://")):
+        return ""
+    return u
 
 
 if __name__ == "__main__":
     main()
-

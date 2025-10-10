@@ -1,5 +1,53 @@
 [
   {
+    "edition": 69,
+    "title": "OpenAI CEO Sam Altman About DevDay and the AI Buildout",
+    "url": "https://stratechery.com/2025/an-interview-with-openai-ceo-sam-altman-about-devday-and-the-ai-buildout",
+    "image": "https://zccfli.stripocdn.email/content/guids/CABINET_44c69fb8613a660a22bdbeb2e7c55909886b57956d39d524ea20358ea720466b/images/image.jpeg",
+    "description": "OpenAI CEO Sam Altman outlined the company's \"grand unifying theory\" as building a highly capable, potentially superintelligent AI and ensuring its beneficial deployment. He stated that the vision involves creating a single AI service that will serve as a continuous \"helper\" for people across their entire lives, integrating with other services via \"Apps in ChatGPT\" and an API business. Altman acknowledged that meeting the current demand requires a massive and \"brutally difficult\" infrastructure buildout, which is consuming most of his time. He utilized his experience as a former investor to frame the company's aggressive, large-scale capital allocation strategy, expressing strong optimism about the current direction of their research. While Thompson suggested an analogy to \"the Windows of AI,\" Altman preferred the historical analogy of the transistor, believing AI will \"seep everywhere\" into every product. He also commented on the viral success of the video generation model Sora, which he attributes to talented teams and a significantly lowered barrier to creation.",
+    "tag": "#AI"
+  },
+  {
+    "edition": 69,
+    "title": "AI Mode can now help you search and explore visually",
+    "url": "https://blog.google/products/search/search-ai-updates-september-2025",
+    "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AI_mode_shopping_hero.width-1200.format-webp.webp",
+    "description": "Google recently announced significant AI enhancements across several of its core products. The Gemini model was integrated into the Chrome browser, functioning as an AI assistant to summarize and clarify information across a user's open tabs. Concurrently, Google Search received a major update to its \"AI Mode,\" which now prioritizes visual exploration and discovery. This new functionality uses Gemini 2.5 and a \"visual search fan-out\" technique to achieve a deeper comprehension of images and natural language queries. Consequently, users can initiate a search by uploading an image or asking a conversational question, resulting in visually relevant results for needs like shopping or design ideas. This enhanced AI Mode experience has also begun a global rollout to include several new languages such as Hindi, Japanese, and Spanish.",
+    "tag": "#AI"
+  },
+  {
+    "edition": 69,
+    "title": "Experiential Marketing Trend of the Week: Potty Parties",
+    "url": "https://www.eventmarketer.com/article/experiential-marketing-trend-of-the-week-potty-parties/",
+    "image": "https://www.eventmarketer.com/wp-content/uploads/2025/10/trend-of-the-week-potty-parties-2.png",
+    "description": "The experiential marketing trend known as \"Potty Parties\" involves brands creating immersive, bathroom-themed experiences for consumers. This trend, highlighted by Event Marketer, signifies a shift in the industry toward engaging with and destigmatizing topics that were once considered taboo. The core objective is often to solve a consumer pain point, leverage toilet humor as an engagement tactic, or combine both elements. Brands are using these unconventional activations to \"clean up\" public perception and foster consumer connections in unexpected environments. These \"experiential potty parties\" are designed to be highly memorable, often incorporating elements of novelty to drive social media conversation. Ultimately, the trend demonstrates marketers' willingness to explore unusual themes to achieve high-level consumer engagement.",
+    "tag": "#ComputerVision"
+  },
+  {
+    "edition": 69,
+    "title": "IBM and Anthropic Partner to Advance Enterprise Software Development with Proven Security and Governance",
+    "url": "https://newsroom.ibm.com/2025-10-07-2025-ibm-and-anthropic-partner-to-advance-enterprise-software-development-with-proven-security-and-governance",
+    "image": "https://newsroom.ibm.com/image/AdobeStock_1683902693_Banner.png",
+    "description": "IBM and Anthropic have announced a strategic partnership aimed at accelerating the development of enterprise-ready AI solutions for software development. The collaboration focuses on integrating Anthropic's Claude family of large language models into IBM's software portfolio. This integration is designed to deliver productivity gains for IBM clients while maintaining strong security and governance standards throughout the software development lifecycle. Claude will initially be integrated into IBM's new AI-first integrated development environment (IDE), which is currently available in a private preview for select clients. Early testing within IBM has indicated productivity gains averaging 45 percent among users of the new IDE, suggesting potential cost savings and efficiency improvements. As part of the agreement, IBM also developed and verified a guide for architecting secure enterprise AI agents using a new methodology called the Agent Development Lifecycle (ADLC).",
+    "tag": "#Experiential"
+  },
+  {
+    "edition": 69,
+    "title": "State of LLMs in Late 2025",
+    "url": "https://blog.arcbjorn.com/state-of-llms-2025",
+    "image": "https://zccfli.stripocdn.email/content/guids/CABINET_44c69fb8613a660a22bdbeb2e7c55909886b57956d39d524ea20358ea720466b/images/gemini_generated_image_9ic7o89ic7o89ic7.png",
+    "description": "The current landscape of Large Language Models (LLMs) in late 2025 has transitioned into a highly specialized ecosystem where models are defined by distinct technical architectures and training focuses. Key innovations driving the field include the adoption of Mixture-of-Experts (MoE) architectures, which allow for massive scale with increased efficiency, and the development of unified intelligence systems like GPT-5, which automatically route queries to specialized sub-models. Performance distinctions are increasingly based on capabilities such as extended autonomous operation for multi-day tasks, computer use functionality for desktop automation, and the size of context windows, with some models now supporting up to 10 million tokens. For specific tasks, models like Claude Sonnet 4.5 excel in software development, while Grok 4 leads in mathematical reasoning and real-time data integration. The shift emphasizes selecting the right specialized AI tool for a job, moving away from the dominance of a single generalist model, with smaller, cost-efficient models also proving competitive in certain scenarios.",
+    "tag": "#Governance"
+  },
+  {
+    "edition": 69,
+    "title": "Qualcomm is buying Arduino, releases new Raspberry Pi-esque Arduino board",
+    "url": "https://arstechnica.com/gadgets/2025/10/arduino-retains-its-brand-and-mission-following-acquisition-by-qualcomm",
+    "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/10/ArduinoUnoQ.jpeg",
+    "description": "Technology corporation Qualcomm has completed the acquisition of Arduino, a platform widely recognized within the open-source hardware community. The key announcement surrounding this transition is that the established Arduino brand and its core mission will be retained. Qualcomm has publicly stated a commitment to preserving the company’s \"open-source ethos\" and operational identity. This decision is aimed at maintaining continuity for the expansive community of developers, educators, and hobbyists who utilize the platform's accessible technology. The acquisition suggests a strategic interest from Qualcomm in expanding its presence within the open-source electronics and Internet of Things (IoT) markets. Ultimately, the structure of Arduino is expected to remain largely consistent in how it delivers products and tools to its user base.",
+    "tag": "#LLMs"
+  },
+  {
     "edition": 68,
     "title": "Sora 2 launched",
     "url": "https://openai.com/index/sora-2/",

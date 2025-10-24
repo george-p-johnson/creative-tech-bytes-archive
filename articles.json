@@ -1,5 +1,53 @@
 [
   {
+    "edition": 71,
+    "title": "OpenAI made ChatGPT better at sifting through your work information",
+    "url": "https://www.theverge.com/news/806046/openai-chatgpt-company-knowledge-update",
+    "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/HowItWorks_16x9_desktop.jpg?quality=90&amp;strip=all&amp;crop=0%2C3.5043662306087%2C100%2C92.991267538783&amp;w=1200",
+    "description": "OpenAI has introduced a new \"Company Knowledge\" feature for ChatGPT, powered by GPT-5, designed to enhance workplace productivity. This update allows ChatGPT to connect with various enterprise tools such as Slack, Google Drive, SharePoint, and GitHub, enabling users to search across their integrated workplace data without switching between applications. The feature is specifically trained to search multiple sources simultaneously, providing more comprehensive and accurate answers with citations from the original files. It is available for Business, Enterprise, and Education users, with administrators having control over connector enablement and user authentication. This move positions ChatGPT as a central intelligence hub for enterprise workflows, competing with other workplace AI solutions.",
+    "tag": "#Enterprise"
+  },
+  {
+    "edition": 71,
+    "title": "Google revamps AI Studio with new features for vibe coding",
+    "url": "https://www.testingcatalog.com/google-revamps-ai-studio-with-new-features-for-vibe-coding",
+    "image": "https://www.testingcatalog.com/content/images/size/w1200/2025/10/Google-AI-Studio-10-21-2025_02_53_PM.jpg",
+    "description": "Google has significantly updated its AI Studio, introducing a \"vibe coding\" experience to simplify and democratize AI application development for a wide range of users, from developers to non-coders. The revamped \"Build\" interface now features an application gallery, an updated model selector, secure secret variable support, and modular AI features, or \"superpowers,\" that can be added with a single click to enhance prompts. Additionally, the studio includes an \"I'm Feeling Lucky\" button for idea generation, context-aware suggestions from Gemini for feature additions and UI improvements, and the ability to annotate UI parts for refined customization. Apps can be easily deployed to Google Cloud Run with one-click publishing, providing a live URL, which aligns with Google's broader strategy to integrate agentic AI and strengthen its competitive position in the AI ecosystem, potentially leveraging the upcoming Gemini 3 release.",
+    "tag": "#Enterprise"
+  },
+  {
+    "edition": 71,
+    "title": "YouTube’s AI ‘likeness detection’ tool is searching for deepfakes of popular creators",
+    "url": "https://www.theverge.com/news/803818/youtube-ai-likeness-detection-deepfake",
+    "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/STK414_AI_CVIRGINIA_I__0002_10.png?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+    "description": "YouTube has launched a new AI detection feature for creators in its Partner Program, allowing them to identify and report unauthorized uploads that use their likeness. After verifying their identity, creators can review flagged videos in YouTube Studio and request the removal of unauthorized, AI-generated content. This feature, which is rolling out to eligible creators in waves, works similarly to Content ID, which detects copyrighted audio and video. YouTube had previously announced and piloted this technology, aiming to help influential figures manage AI-generated content featuring their likeness at scale. The company also requires creators to label AI-generated or altered content and has a strict policy regarding AI-generated music that mimics an artist's voice.",
+    "tag": "#VibeCoding"
+  },
+  {
+    "edition": 71,
+    "title": "OpenAI looks for its “Google Chrome” moment with new Atlas web browser",
+    "url": "https://arstechnica.com/ai/2025/10/openais-new-atlas-web-browser-wants-to-let-you-chat-with-a-page",
+    "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/10/atlaslogo.jpg",
+    "description": "OpenAI has launched Atlas, a new web browser that integrates its ChatGPT large language model, aiming to replicate Google Chrome's success by making the chat experience a core part of web browsing. Available now on macOS, with Windows and mobile versions planned, Atlas allows users to \"chat with a page\" and brings ChatGPT's capabilities to various browsing functions, including searching bookmarks, providing context-aware side chats, and directly editing content in applications like Gmail. The browser also features an \"Agent Mode\" (currently a preview for ChatGPT Plus and Pro subscribers) that can automate tasks across different web applications, such as moving planning tasks from Google Docs to Linear or adding recipe ingredients to Instacart. This move positions OpenAI to gain more direct access to user data and potentially integrate ads, while also entering a competitive field where other tech giants like Microsoft and Google are also integrating AI features into their browsers.",
+    "tag": "#Deepfakes"
+  },
+  {
+    "edition": 71,
+    "title": "Snapchat makes its first open prompt AI Lens available for free in the US",
+    "url": "https://techcrunch.com/2025/10/22/snapchat-makes-its-first-open-prompt-ai-lens-available-for-free-in-the-us",
+    "image": "https://www.maginative.com/content/images/size/w1200/2025/10/figma_ai.jpg",
+    "description": "Snapchat has made its \"Imagine Lens,\" its first open prompt image-generation AI Lens, available for free to all users in the US. This feature allows users to generate and edit images using custom text prompts, offering creative options like transforming selfies or generating new images for sharing. This move expands access beyond paid subscribers, positioning Snapchat to compete with other social apps launching advanced AI video-generating tools, like Meta AI and OpenAI's Sora. While free users have a limited number of generations, this initiative aims to boost user creativity and interaction within the app, with plans for international rollout.",
+    "tag": "#Browser"
+  },
+  {
+    "edition": 71,
+    "title": "Google has a useful quantum algorithm that outperforms a supercomputer",
+    "url": "https://arstechnica.com/science/2025/10/google-claims-to-have-quantum-advantage-with-a-potentially-useful-algorithm/",
+    "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/10/GoogleQuantumAI_WillowChip_Closeup03-2560x1440.jpg",
+    "description": "Google, in collaboration with academic partners, has published a paper detailing a computational approach called \"quantum echoes\" that demonstrates a quantum advantage over current algorithms. This method, which involves a series of operations on quantum hardware, has shown that a measurement taking 2.1 hours on a quantum computer would take a supercomputer approximately 3.2 years to perform. While the demonstrations were initially conducted on simple molecules, the researchers are optimistic that this system could extract structural information from molecules at distances currently unobtainable with traditional Nuclear Magnetic Resonance (NMR) techniques. Google is claiming both quantum advantage and utility, though not simultaneously, as current quantum hardware fidelity needs improvement to model molecules beyond classical simulation. The verifiability of these results will require another quantum computer, as Google states no other processor currently matches their system's error rates and qubit count.",
+    "tag": "#AR"
+  },
+  {
     "edition": 70,
     "title": "Introducing Veo 3.1 and advanced capabilities in Flow",
     "url": "https://blog.google/technology/ai/veo-updates-flow",
